@@ -1,9 +1,7 @@
 #include "Actuator.h"
 
-
 Actuator::Actuator()
 {
-
 }
 
 void Actuator::Setup(int pinPush, int pinPull)
