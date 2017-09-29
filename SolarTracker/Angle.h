@@ -13,10 +13,10 @@ public:
   Angle();
   ~Angle();
   void Angle::Setup();
-  void Angle::ReadMpu6050Data();
   double Angle::GetAngle();
 
 private:
+  void Angle::ReadMpu6050Data();
   int gyro_x, gyro_y, gyro_z;
   long gyro_x_cal, gyro_y_cal, gyro_z_cal;
   boolean set_gyro_angles;
