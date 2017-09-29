@@ -1,0 +1,9 @@
+
+\.vs/Arduino\.SolarTracker/v15/
+Debug
+Release
+__vm
+
+*.user
+
+*.filters
