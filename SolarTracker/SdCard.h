@@ -15,7 +15,7 @@ public:
   ~SdCard();
   void Read(char fileName[]);
   void Write(char fileName[]);
-  void Setup();
+  void Init();
 private:
   File myFile;
 };
