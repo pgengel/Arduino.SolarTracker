@@ -8,7 +8,7 @@ SerialEvent::~SerialEvent()
 {
 }
 
-void SerialEvent::Setup()
+void SerialEvent::Init()
 {
   // initialize serial:
   Serial.begin(9600);

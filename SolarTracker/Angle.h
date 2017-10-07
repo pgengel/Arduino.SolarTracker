@@ -12,7 +12,7 @@ class Angle
 public:
   Angle();
   ~Angle();
-  void Angle::Setup();
+  void Angle::Init();
   double Angle::GetAngle();
 
 private:

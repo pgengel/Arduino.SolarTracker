@@ -12,7 +12,7 @@ class Actuator
 {
 public:
   Actuator();
-  void Setup(int pinPush, int pinPull);
+  void Init(int pinPush, int pinPull);
   void Push();
   void Pull();
   void Break();

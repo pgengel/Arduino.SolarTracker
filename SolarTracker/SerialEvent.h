@@ -13,7 +13,7 @@ class SerialEvent
 public:
   SerialEvent::SerialEvent();
   SerialEvent::~SerialEvent();
-  void SerialEvent::Setup();
+  void SerialEvent::Init();
   void SerialEvent::Read();
   void SerialEvent::Send();
 private:

@@ -9,7 +9,7 @@ Angle::~Angle()
 {
 }
 
-void Angle::Setup() {
+void Angle::Init() {
   Wire.begin();                                                        //Start I2C as master                                                                     //Activate the MPU-6050
   Wire.beginTransmission(0x68);                                        //Start communicating with the MPU-6050
   Wire.write(0x6B);                                                    //Send the requested starting register

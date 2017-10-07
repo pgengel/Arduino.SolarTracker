@@ -4,7 +4,7 @@ Actuator::Actuator()
 {
 }
 
-void Actuator::Setup(int pinPush, int pinPull)
+void Actuator::Init(int pinPush, int pinPull)
 {
   _pinPush = pinPush;
   _pinPull = pinPull;
