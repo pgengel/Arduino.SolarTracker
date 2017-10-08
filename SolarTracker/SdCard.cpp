@@ -25,8 +25,9 @@ void SdCard::Init()
   Serial.println("initialization done.");
 }
 
-char SdCard::Read(char fileName[])
+int SdCard::GetAngle(char fileName[], DateTime now)
 {
+  int angle;
   // re-open the file for reading:
   myFile = SD.open(fileName);
   if (myFile) {
@@ -34,9 +35,9 @@ char SdCard::Read(char fileName[])
 
     // read from the file until there's nothing else in it:
     while (myFile.available()) {
-      Serial.write(myFile.read());
-      fileContents[index++] = myFile.read();
+      fileContents[index++] = myFile.parseInt();
       fileContents[index] = '\0'; // NULL terminate the array
+      Serial.write(fileContents);
     }
     // close the file:
     myFile.close();
@@ -47,6 +48,16 @@ char SdCard::Read(char fileName[])
   }
   // close the file:
   myFile.close();
+
+  for (size_t i = 0; i < 128; i++)
+  {
+    if (fileContents[i] == now.hour())
+    {
+      angle = fileContents[i++];
+    }
+  }
+
+  return 1;
 }
 
 void SdCard::Write(char fileName[])
@@ -69,4 +80,9 @@ void SdCard::Write(char fileName[])
   }
   // close the file:
   myFile.close();
+}
+
+void SdCard::FindAngle(int time)
+{
+
 }
