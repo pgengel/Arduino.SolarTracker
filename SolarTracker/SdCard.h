@@ -13,10 +13,12 @@ class SdCard
 public:
   SdCard();
   ~SdCard();
-  void Read(char fileName[]);
+  char Read(char fileName[]);
   void Write(char fileName[]);
   void Init();
 private:
   File myFile;
+  char fileContents[128]; // Probably can be smaller
+  byte index = 0;
 };
 #endif

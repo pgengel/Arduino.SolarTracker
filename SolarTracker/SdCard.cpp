@@ -25,7 +25,7 @@ void SdCard::Init()
   Serial.println("initialization done.");
 }
 
-void SdCard::Read(char fileName[])
+char SdCard::Read(char fileName[])
 {
   // re-open the file for reading:
   myFile = SD.open(fileName);
@@ -35,6 +35,8 @@ void SdCard::Read(char fileName[])
     // read from the file until there's nothing else in it:
     while (myFile.available()) {
       Serial.write(myFile.read());
+      fileContents[index++] = myFile.read();
+      fileContents[index] = '\0'; // NULL terminate the array
     }
     // close the file:
     myFile.close();
