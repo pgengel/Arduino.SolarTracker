@@ -15,8 +15,8 @@ public:
   H12();
   ~H12();
   void Init();
-  void Read();
-  void Write();
+  String Read();
+  void Write(int transmit);
 private: 
 
 };

@@ -19,20 +19,17 @@ void H12::Init()
   mySerial.begin(9600);
 }
 
-void H12::Read() 
+String H12::Read()
 {
   if (Serial.available() > 0)//Read from serial monitor and send over HC-12
   {
     String input = Serial.readString();
     mySerial.println(input);
-  }
+    return input;
+  } 
 }
 
-void H12::Write()
+void H12::Write(int transmit)
 {
-  if (mySerial.available() > 1) //Read from HC-12 and send to serial monitor
-  {    
-    String input = mySerial.readString();
-    Serial.println(input);
-  }
+   Serial.println(transmit);
 }

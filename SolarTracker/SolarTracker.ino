@@ -3,6 +3,11 @@
 #include <RTClib.h>
 #include "SdCard.h"
 #include <math.h> 
+#include "H12.h"
+#include <SoftwareSerial.h>
+#include "TCA9548.h"
+#include "Angle.h"
+#include "Actuator.h"
 
 #define SOLARDATAFILE "solardatafile.csv"
 #define WindSensorPin (2) // The pin location of the anemometer sensor 
@@ -14,10 +19,22 @@ float WindSpeed; // speed miles per hour
 
 RTC_DS1307 rtc;
 SdCard sdCard;
+H12 h12;
+Angle measureAngle;
+Actuator actuator;
 
-void setup() {
+void setup() 
+{
+  Serial.begin(9600);
   TimeInit();
   sdCard.Init();
+
+  //The slave arduino must have a starting position of 90 deg.
+
+  AnemometerInit();
+  h12.Init();
+  measureAngle.Init();
+  actuator.Init(13, 8);
 }
 
 void loop() {
@@ -29,12 +46,64 @@ void loop() {
   int angle = sdCard.GetAngle(SOLARDATAFILE, now);
 
   //The master arduino must measure the wind speed.
+  GetWindSpeed();//global variable
 
+  //The master arduino must send the desired angle to the slave arduino using H12 every 10 sec.
+  h12.Write(angle);
+
+  //The slave arduino must read desired angle from wireless H12
+  String desiredAngle = h12.Read();
+
+  //The slave arduino must measure the current angle from the accelor for each device.
+  double actualAngle = measureAngle.GetAngle();
+
+  //The slave arduino must adjust the panel to the desired angle to 2 deg.
+  double difference = desiredAngle.toDouble() - actualAngle;
+  if (difference > 0)
+  {
+    actuator.Pull();
+  }
+  if (difference < 0)
+  {
+    actuator.Push();
+  }
 
   delay(3000);
 }
 
+// This is the function that the interrupt calls to increment the rotation count 
+void isr_rotation() {
 
+  if ((millis() - ContactBounceTime) > 15) { // debounce the switch contact. 
+    Rotations++;
+    ContactBounceTime = millis();
+  }
+
+}
+
+void AnemometerInit()
+{
+  pinMode(WindSensorPin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(WindSensorPin), isr_rotation, FALLING);
+
+  Serial.println("Wind Speed Test");
+  Serial.println("Rotations\tMPH");
+}
+
+void GetWindSpeed()
+{
+  //The master arduino must measure the wind speed.
+  Rotations = 0; // Set Rotations count to 0 ready for calculations 
+
+  sei(); // Enables interrupts 
+  delay(3000); // Wait 3 seconds to average 
+  cli(); // Disable interrupts 
+
+  WindSpeed = Rotations * 1.207005;
+
+  Serial.print(Rotations); Serial.print("\t\t");
+  Serial.println(WindSpeed);
+}
 
 void TimeInit()
 {
